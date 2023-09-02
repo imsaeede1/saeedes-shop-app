@@ -1,8 +1,8 @@
-export const dynamicParams = true;
+export const dynamic = "force-static"; // SSG or {cache : "force-cache"}
+export const dynamicParams = false;
 async function fetchProduct(productId) {
   const res = await fetch(
-    `https://fakestoreapi.com/products/${productId}`,
-    { catch: "no-store" }
+    `https://fakestoreapi.com/products/${productId}`
     // { next: { revalidate: 60 } }
   );
   const product = await res.json();
@@ -193,14 +193,14 @@ const ProductDetail = async ({ params }) => {
 
 export default ProductDetail;
 
-// export async function generateStaticParams() {
-//   const res = await fetch("https://fakestoreapi.com/products");
-//   const products = await res.json();
+export async function generateStaticParams() {
+  const res = await fetch("https://fakestoreapi.com/products");
+  const products = await res.json();
 
-//   return products.slice(0, 4).map((product) => ({
-//     productId: product.id.toString(),
-//   }));
-// }
+  return products.map((product) => ({
+    productId: product.id.toString(),
+  }));
+}
 
 export async function generateMetadata({ params }) {
   const product = await fetchProduct(params.productId);
